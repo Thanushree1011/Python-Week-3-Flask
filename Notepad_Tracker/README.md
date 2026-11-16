@@ -7,6 +7,7 @@ any folder on your machine and browse each file's commit history.
 ## Setup
 
 ```bash
+cd Notepad_Tracker
 python -m venv venv
 venv\Scripts\activate        # Windows  (macOS/Linux: source venv/bin/activate)
 pip install -r requirements.txt
@@ -31,8 +32,8 @@ folder (e.g. `C:\Users\you\Notes`).
 - If the folder is not inside a Git repository, one is created there. If it is
   already inside a repository, commits go to that repository.
 - **History** lists the last 20 commits for the open file.
-- If Git has no user configured, commits use the identity
-  `Notepad Tracker <notepad@local>`.
+- Every commit is made as `Notepad Tracker <notepad@local>`, so your own Git
+  name and email are never used or changed.
 
 ## Security note
 

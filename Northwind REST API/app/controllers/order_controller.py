@@ -2,7 +2,11 @@
 
 from app.extensions import db, commit_or_rollback
 from app.validators.order_validator import OrderCreate, OrderUpdate
-from app.models import Order, OrderDetail, Product
+from app.models import Order, OrderDetail, Product, Customer
+
+class CustomerNotFound(Exception):
+    pass
+
 
 def get_all_orders():
     return Order.query.all()
@@ -14,6 +18,8 @@ def get_order_by_id(order_id):
 
 def create_order(data):
     validated_data = OrderCreate(**data)
+    if not db.session.get(Customer, validated_data.customer_id):
+        raise CustomerNotFound("Customer does not exist")
 
     order_data = validated_data.model_dump(exclude_unset=True)
 
@@ -54,7 +60,10 @@ def get_order_details(order_id):
     result = []
 
     for detail in details:
-        product = db.session.get(Product, detail.product_id)
+        product = (
+            db.session.get(Product, detail.product_id)
+            if detail.product_id is not None else None
+        )
 
         result.append({
             "detail_id": detail.id,

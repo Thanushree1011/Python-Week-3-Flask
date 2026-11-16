@@ -40,6 +40,9 @@ def test_create_order():
     }
 
     with patch(
+    "app.controllers.order_controller.db.session.get",
+    return_value=object()
+    ), patch(
         "app.controllers.order_controller.db.session.add"
     ) as mock_add, patch(
         "app.controllers.order_controller.commit_or_rollback"

@@ -1,7 +1,7 @@
 
 from types import SimpleNamespace
 from unittest.mock import patch
-
+import json
 import pytest
 
 from app import create_app
@@ -175,3 +175,15 @@ def test_order_details_not_found(client):
 
     assert response.status_code == 404
     assert response.json["error"] == "Order not found"
+
+def test_create_order_customer_not_found(client):
+    from app.controllers.order_controller import CustomerNotFound
+
+    with patch(
+        "app.routes.order_routes.create_order",
+        side_effect=CustomerNotFound("Customer does not exist")
+    ):
+        response = client.post("/orders", json={"customer_id": 999})
+
+    assert response.status_code == 404
+    assert response.get_json()["error"] == "Customer does not exist"

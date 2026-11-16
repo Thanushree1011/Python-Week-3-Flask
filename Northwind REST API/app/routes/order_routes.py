@@ -2,13 +2,14 @@
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
-
+import json
 from app.controllers.order_controller import (
     get_all_orders,
     get_order_by_id,
     create_order,
     update_order,
-    get_order_details
+    get_order_details,
+    CustomerNotFound
 )
 
 order_bp = Blueprint("order", __name__)
@@ -40,9 +41,7 @@ def order_to_dict(order):
 
 
 def handle_error(error):
-    return jsonify({
-        "errors": error.errors(include_url=False)
-    }), 400
+    return jsonify({"errors": json.loads(error.json(include_url=False))}), 400
 
 
 @order_bp.route("/orders", methods=["GET"])
@@ -93,6 +92,9 @@ def add_order():
 
     except ValidationError as error:
         return handle_error(error)
+
+    except CustomerNotFound as error:
+        return jsonify({"error": str(error)}), 404
 
     except SQLAlchemyError:
         return jsonify({"error": "Database error"}), 500

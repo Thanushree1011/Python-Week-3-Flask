@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from pydantic import ValidationError
 from sqlalchemy import text
 
 from app.config import Config

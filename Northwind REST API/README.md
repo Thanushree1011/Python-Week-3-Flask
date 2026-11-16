@@ -1,29 +1,20 @@
 # Northwind REST API
 
-A REST API built using Python, Flask, Flask-SQLAlchemy, and MySQL to manage Northwind database records.
+A REST API built with Python, Flask, Flask-SQLAlchemy and MySQL to manage records in the Northwind database.
 
 ## Features
 
-- Customer management: create, retrieve, update, and delete customers.
-- Product management: create, retrieve, and update products.
-- Order management: create, retrieve, and update orders.
-- Retrieve order history for a customer.
-- Retrieve details of a specific order.
-- Input validation using Pydantic.
-- Database operations using SQLAlchemy ORM.
-- Unit and API route tests using pytest and mocking.
+- Customers: create, retrieve, update.
+- Products: create, retrieve, update.
+- Orders: create, retrieve, update, and view order details.
+- Order history for a customer.
+- Input validation with Pydantic (types, lengths, email format, non-negative amounts, date order).
+- Database access through the SQLAlchemy ORM.
+- Unit and route tests with pytest, with the database mocked.
 
-## Technologies Used
+## Technologies
 
-- Python
-- Flask
-- Flask-SQLAlchemy
-- SQLAlchemy
-- MySQL
-- PyMySQL
-- Pydantic
-- pytest
-- pytest-mock
+Python, Flask, SQLAlchemy, MySQL, Pydantic, pytest
 
 ## Project Structure
 
@@ -31,11 +22,10 @@ A REST API built using Python, Flask, Flask-SQLAlchemy, and MySQL to manage Nort
 Northwind REST API/
 │
 ├── app/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── validators/
-│   ├── views/
+│   ├── controllers/   # business logic
+│   ├── models/        # SQLAlchemy models
+│   ├── routes/        # HTTP endpoints and JSON output
+│   ├── validators/    # Pydantic schemas
 │   ├── __init__.py
 │   ├── config.py
 │   └── extensions.py
@@ -46,7 +36,8 @@ Northwind REST API/
 │   ├── test_product.py
 │   ├── test_product_controller.py
 │   ├── test_order.py
-│   └── test_order_controller.py
+│   ├── test_order_controller.py
+│   └── test_validators.py
 │
 ├── .env
 ├── .gitignore
@@ -57,11 +48,11 @@ Northwind REST API/
 
 ## Prerequisites
 
-- Python installed
+- Python 3.12 or newer
 - MySQL Server installed and running
-- Existing Northwind database
+- An existing Northwind database
 
-The application connects to the existing Northwind database. It does not create or recreate database tables.
+The application connects to the existing Northwind database. It does not create or recreate tables.
 
 ## Installation
 
@@ -104,11 +95,9 @@ MYSQL_DATABASE=northwind
 MYSQL_PORT=3306
 ```
 
-Replace the username and password with your own MySQL credentials.
+Replace the username and password with your own MySQL credentials. Do not commit this file or share it.
 
 ## Running the Application
-
-Start the Flask application:
 
 ```bash
 python run.py
@@ -135,8 +124,8 @@ http://127.0.0.1:5000/db-check
 | GET | `/customers` | Retrieve all customers |
 | GET | `/customers/<id>` | Retrieve a customer |
 | POST | `/customers` | Create a customer |
-| PUT | `/customers/<id>` | Update a customer |
-| DELETE | `/customers/<id>` | Delete a customer |
+| PUT | `/customers/<id>` | Update a customer (partial updates allowed) |
+| DELETE | `/customers/<id>` | Delete a customer (not possible if it has orders) |
 | GET | `/customers/<id>/orders` | Retrieve customer order history |
 
 ### Product Endpoints
@@ -146,7 +135,7 @@ http://127.0.0.1:5000/db-check
 | GET | `/products` | Retrieve all products |
 | GET | `/products/<id>` | Retrieve a product |
 | POST | `/products` | Create a product |
-| PUT | `/products/<id>` | Update a product |
+| PUT | `/products/<id>` | Update a product (partial updates allowed) |
 
 ### Order Endpoints
 
@@ -154,9 +143,32 @@ http://127.0.0.1:5000/db-check
 |---|---|---|
 | GET | `/orders` | Retrieve all orders |
 | GET | `/orders/<id>` | Retrieve an order |
-| POST | `/orders` | Create an order |
+| POST | `/orders` | Create an order (`customer_id` is required) |
 | PUT | `/orders/<id>` | Update an order |
 | GET | `/orders/<id>/details` | Retrieve order details |
+
+## Validation Rules
+
+- Unknown fields are rejected.
+- Customer: `email_address` must be a valid email address, and the request body cannot be empty.
+- Product: `list_price` and `standard_cost` cannot be negative, and the request body cannot be empty.
+- Order: `customer_id` is required and the customer must exist. `shipping_fee` and `taxes` cannot be negative. `shipped_date` cannot be before `order_date`.
+- Text fields have maximum lengths that match the database columns.
+
+## Response Codes
+
+| Code | Meaning |
+|---|---|
+| 200 / 201 | Success / created |
+| 400 | Invalid JSON or failed validation (details are in `errors`) |
+| 404 | Record not found, or the customer does not exist when creating an order |
+| 500 | Database error |
+
+## Example Request
+
+```powershell
+curl.exe -X POST http://127.0.0.1:5000/orders -H "Content-Type: application/json" -d '{\"customer_id\":1,\"payment_type\":\"Check\"}'
+```
 
 ## Running Tests
 
@@ -174,10 +186,11 @@ python -m pytest tests/test_customer.py -v
 
 ## Test Results
 
-The project currently has **38 passing tests** covering customer, product, and order routes and controller functions.
+The project currently has **45 passing tests** covering routes, controller functions and validators. The database is mocked, so no MySQL connection is needed to run the tests.
 
 ## Notes
 
-- Database credentials are stored in `.env` and should not be committed to GitHub.
+- Database credentials are stored in `.env` and should not be committed to GitHub or shared.
 - The existing Northwind MySQL database is required.
+- Order lines cannot be created through the API. `GET /orders/<id>/details` reads existing ones.
 - AWS deployment is not included in this project.

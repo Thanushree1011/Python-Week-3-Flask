@@ -2,14 +2,14 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field,model_validator
 
 
 class OrderCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     employee_id: int | None = None
-    customer_id: int | None = None
+    customer_id: int = Field(gt=0)
 
     order_date: datetime | None = None
     shipped_date: datetime | None = None
@@ -22,8 +22,8 @@ class OrderCreate(BaseModel):
     ship_zip_postal_code: str | None = Field(default=None, max_length=50)
     ship_country_region: str | None = Field(default=None, max_length=50)
 
-    shipping_fee: Decimal | None = None
-    taxes: Decimal | None = None
+    shipping_fee: Decimal | None = Field(default=None, ge=0)
+    taxes: Decimal | None = Field(default=None, ge=0)
     payment_type: str | None = Field(default=None, max_length=50)
     paid_date: datetime | None = None
 
@@ -32,6 +32,12 @@ class OrderCreate(BaseModel):
     tax_status_id: int | None = None
     status_id: int | None = None
 
+    @model_validator(mode="after")
+    def dates_in_order(self):
+        if self.order_date and self.shipped_date and self.shipped_date < self.order_date:
+            raise ValueError("shipped_date cannot be before order_date")
+        return self
+
 
 class OrderUpdate(OrderCreate):
-    pass
+    customer_id: int | None = Field(default=None, gt=0)   # optional on update

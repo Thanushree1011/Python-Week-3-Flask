@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
-
+import json
 from app.controllers.customer_controller import (
     get_all_customers,
     get_customer_by_id,
@@ -39,10 +39,7 @@ def customer_to_dict(customer):
 
 
 def handle_error(error):
-
-    return jsonify({
-        "errors": error.errors(include_url=False)
-    }), 400
+    return jsonify({"errors": json.loads(error.json(include_url=False))}), 400
 
 
 @customer_bp.route("/customers", methods=["GET"])

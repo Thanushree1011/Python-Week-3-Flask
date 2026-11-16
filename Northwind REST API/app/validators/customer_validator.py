@@ -1,5 +1,5 @@
-from pydantic import BaseModel, ConfigDict, Field
-
+from pydantic import BaseModel, ConfigDict, Field,EmailStr, model_validator
+from typing import Optional
 
 class CustomerCreate(BaseModel):
 
@@ -8,7 +8,7 @@ class CustomerCreate(BaseModel):
     company: str | None = Field(default=None, max_length=50)
     last_name: str | None = Field(default=None, max_length=50)
     first_name: str | None = Field(default=None, max_length=50)
-    email_address: str | None = Field(default=None, max_length=50)
+    email_address: EmailStr | None = Field(default=None, max_length=50)
     job_title: str | None = Field(default=None, max_length=50)
 
     business_phone: str | None = Field(default=None, max_length=25)
@@ -25,6 +25,11 @@ class CustomerCreate(BaseModel):
     web_page: str | None = None
     notes: str | None = None
 
+    @model_validator(mode="after")
+    def not_empty(self):
+        if not self.model_fields_set:
+            raise ValueError("At least one field is required")
+        return self
 
 class CustomerUpdate(CustomerCreate):
     pass

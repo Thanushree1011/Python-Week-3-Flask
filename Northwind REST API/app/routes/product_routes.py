@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
-
+import json
 from app.controllers.product_controller import (
     get_all_products,
     get_product_by_id,
@@ -37,10 +37,7 @@ def product_to_dict(product):
 
 
 def handle_error(error):
-
-    return jsonify({
-        "errors": error.errors(include_url=False)
-    }), 400
+    return jsonify({"errors": json.loads(error.json(include_url=False))}), 400
 
 
 @product_bp.route("/products", methods=["GET"])

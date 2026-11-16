@@ -1,0 +1,875 @@
+
+/* ========================================
+   1. GLOBAL SETTINGS
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --background: #111318;
+    --header: #191c24;
+    --sidebar: #171a21;
+    --editor: #1e222b;
+    --toolbar: #242936;
+    --border: #303642;
+    --text: #e4e7ed;
+    --muted: #929aaa;
+    --accent: #6c9eff;
+    --accent-hover: #4e83e8;
+    --success: #43c98b;
+    --danger: #f16b76;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+
+/* ========================================
+   2. MAIN APPLICATION
+======================================== */
+
+.app-container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+
+/* ========================================
+   3. TOP HEADER
+======================================== */
+
+.top-header {
+    height: 68px;
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: var(--header);
+    border-bottom: 1px solid var(--border);
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 250px;
+}
+
+.brand-icon {
+    font-size: 29px;
+}
+
+.brand-details h1 {
+    font-size: 18px;
+    font-weight: 650;
+    letter-spacing: 0.2px;
+}
+
+.brand-subtitle {
+    display: block;
+    margin-top: 3px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.file-indicator {
+    color: var(--accent);
+    font-size: 10px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 100px;
+    justify-content: flex-end;
+    font-size: 12px;
+    color: var(--success);
+}
+
+.status-indicator {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background: var(--success);
+}
+
+
+/* ========================================
+   4. MAIN CONTENT
+======================================== */
+
+.main-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+
+/* ========================================
+   5. SIDEBAR
+======================================== */
+
+.sidebar {
+    width: 270px;
+    min-width: 230px;
+    display: flex;
+    flex-direction: column;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+}
+
+.sidebar-header {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h2 {
+    margin-bottom: 18px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    color: var(--muted);
+}
+
+.sidebar-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.sidebar-actions button {
+    flex: 1;
+    padding: 9px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #252b37;
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.sidebar-actions button:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+.directory-section {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.directory-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 17px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.directory-header:hover {
+    background: #222733;
+}
+
+.workspace-icon {
+    font-size: 15px;
+}
+
+.workspace-arrow {
+    margin-left: auto;
+    color: var(--muted);
+}
+
+.file-tree {
+    padding: 5px 10px 15px;
+    overflow-y: auto;
+}
+
+.empty-message {
+    padding: 30px 10px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.empty-icon {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 30px;
+}
+
+.empty-message p {
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.empty-message small {
+    font-size: 11px;
+    color: #737d8e;
+}
+
+/* File and folder items */
+
+.file-tree-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    margin: 2px 0;
+    border-radius: 5px;
+    color: #c3cad6;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.15s ease;
+    overflow: hidden;
+}
+
+.file-tree-item:hover {
+    background: #282f3c;
+    color: white;
+}
+
+.file-tree-item.active,
+.file-tree-item.selected {
+    background: #293d60;
+    color: #ffffff;
+}
+
+.file-tree-item span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   6. EDITOR SECTION
+======================================== */
+
+.editor-section {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--editor);
+}
+
+
+/* ========================================
+   7. EDITOR TOOLBAR
+======================================== */
+
+.editor-toolbar {
+    height: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    background: var(--toolbar);
+    border-bottom: 1px solid var(--border);
+}
+
+.editor-tab {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 13px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--text);
+    font-size: 13px;
+}
+
+.tab-icon {
+    font-size: 15px;
+}
+
+.editor-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.editor-actions button {
+    padding: 7px 13px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: #303746;
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.editor-actions button:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+#save-btn {
+    background: #315f9f;
+    border-color: #315f9f;
+    color: white;
+}
+
+#save-btn:hover {
+    background: var(--accent-hover);
+}
+
+
+/* ========================================
+   8. TEXT EDITOR
+======================================== */
+
+.editor-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
+    background: var(--editor);
+}
+
+.line-numbers {
+    width: 58px;
+    min-width: 58px;
+    padding: 22px 14px 20px 5px;
+    overflow: hidden;
+    border-right: 1px solid var(--border);
+    background: #1a1e26;
+    color: #626d80;
+    text-align: right;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre;
+    user-select: none;
+}
+
+.editor {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    padding: 22px 25px;
+    resize: none;
+    outline: none;
+    border: none;
+    background: transparent;
+    color: #e0e6f0;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre;
+    overflow: auto;
+    tab-size: 4;
+    caret-color: var(--accent);
+}
+
+.editor::placeholder {
+    color: #626d80;
+    opacity: 1;
+}
+
+.editor:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.editor:not(:disabled) {
+    opacity: 1;
+}
+
+
+/* ========================================
+   9. EDITOR FOOTER
+======================================== */
+
+.editor-footer {
+    height: 27px;
+    min-height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: #1a1e26;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* ========================================
+   10. BOTTOM STATUS BAR
+======================================== */
+
+.status-bar {
+    height: 30px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: #315f9f;
+    color: white;
+    font-size: 11px;
+}
+
+.status-left,
+.status-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.status-item {
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   11. SCROLLBARS
+======================================== */
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #414958;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5b6678;
+}
+
+
+/* ========================================
+   12. RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 700px) {
+
+    .top-header {
+        padding: 0 12px;
+    }
+
+    .app-brand {
+        min-width: auto;
+    }
+
+    .brand-subtitle {
+        display: none;
+    }
+
+    .header-center {
+        display: none;
+    }
+
+    .sidebar {
+        width: 190px;
+        min-width: 160px;
+    }
+
+    .sidebar-header {
+        padding: 14px 10px;
+    }
+
+    .sidebar-actions {
+        flex-direction: column;
+    }
+
+    .editor-toolbar {
+        padding: 0 8px;
+    }
+
+    .editor-actions {
+        gap: 5px;
+    }
+
+    .editor-actions button {
+        padding: 6px 8px;
+    }
+
+    .editor {
+        padding: 18px 12px;
+        font-size: 13px;
+    }
+
+    .status-bar {
+        padding: 0 8px;
+        font-size: 10px;
+    }
+
+    .status-right {
+        gap: 9px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .sidebar {
+        width: 145px;
+        min-width: 145px;
+    }
+
+    .brand-details h1 {
+        font-size: 14px;
+    }
+
+    .brand-icon {
+        font-size: 23px;
+    }
+
+    .editor-tab {
+        padding: 0 5px;
+    }
+
+    .editor-actions button {
+        font-size: 10px;
+    }
+
+    .status-right .status-item:last-child {
+        display: none;
+    }
+}
+
+
+/* ========================================
+   LIGHT THEME
+======================================== */
+
+:root {
+    --background: #f8fafc;
+    --header: #ffffff;
+    --sidebar: #f8fafc;
+    --editor: #ffffff;
+    --toolbar: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --success: #16a34a;
+    --danger: #dc2626;
+}
+
+html,
+body,
+.app-container {
+    background: #ffffff;
+    color: #1e293b;
+}
+
+/* Header */
+
+.top-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.brand-details h1 {
+    color: #172033;
+}
+
+.brand-subtitle {
+    color: #64748b;
+}
+
+.header-center {
+    color: #475569;
+}
+
+.header-actions {
+    color: #16a34a;
+}
+
+/* Sidebar */
+
+.sidebar {
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+}
+
+.sidebar-header {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sidebar-header h2 {
+    color: #64748b;
+}
+
+.sidebar-actions button {
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+
+.sidebar-actions button:hover {
+    background: #eff6ff;
+    color: #2563eb;
+    border-color: #93c5fd;
+}
+
+.directory-header {
+    color: #334155;
+}
+
+.directory-header:hover {
+    background: #eef2f7;
+}
+
+.file-tree-item {
+    color: #475569;
+}
+
+.file-tree-item:hover {
+    background: #e8eef7;
+    color: #1e293b;
+}
+
+.file-tree-item.active,
+.file-tree-item.selected {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.empty-message {
+    color: #64748b;
+}
+
+/* Editor toolbar */
+
+.editor-section {
+    background: #ffffff;
+}
+
+.editor-toolbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.editor-tab {
+    color: #1e293b;
+    border-bottom-color: #3b82f6;
+}
+
+.editor-actions button {
+    background: #ffffff;
+    color: #334155;
+    border-color: #cbd5e1;
+}
+
+.editor-actions button:hover {
+    background: #eff6ff;
+    color: #2563eb;
+    border-color: #93c5fd;
+}
+
+#save-btn {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+#save-btn:hover {
+    background: #1d4ed8;
+}
+
+/* Text editor */
+
+.editor-container {
+    background: #ffffff;
+}
+
+.line-numbers {
+    background: #f8fafc;
+    color: #94a3b8;
+    border-right: 1px solid #e2e8f0;
+}
+
+.editor {
+    background: #ffffff;
+    color: #1e293b;
+    caret-color: #2563eb;
+}
+
+.editor::placeholder {
+    color: #94a3b8;
+}
+
+/* Editor footer */
+
+.editor-footer {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
+}
+
+/* Status bar */
+
+.status-bar {
+    background: #eff6ff;
+    border-top: 1px solid #dbeafe;
+    color: #334155;
+}
+
+/* Scrollbars */
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+
+/* ========================================
+   GIT HISTORY MODAL
+======================================== */
+
+.history-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.35);
+    padding: 20px;
+}
+
+.history-modal.hidden {
+    display: none;
+}
+
+.history-panel {
+    width: 100%;
+    max-width: 650px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.history-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+.history-header p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    color: #6b7280;
+    overflow-wrap: anywhere;
+}
+
+#close-history-btn {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+#close-history-btn:hover {
+    color: #111827;
+}
+
+.history-list {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.history-empty {
+    text-align: center;
+    color: #6b7280;
+    padding: 30px 10px;
+}
+
+.history-item {
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #f9fafb;
+}
+
+.history-item:last-child {
+    margin-bottom: 0;
+}
+
+.history-item h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    color: #1f2937;
+    overflow-wrap: anywhere;
+}
+
+.history-item p {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.history-hash {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-family: monospace;
+    font-size: 12px;
+}

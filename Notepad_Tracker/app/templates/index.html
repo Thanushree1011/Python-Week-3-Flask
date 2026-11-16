@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="A personal notepad with file management and Git tracking.">
+
+    <title>Notepad Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Top Header -->
+        <header class="top-header">
+
+            <div class="app-brand">
+                <div class="brand-icon">📝</div>
+
+                <div class="brand-details">
+                    <h1>Notepad Tracker</h1>
+                    <span class="brand-subtitle">Your personal writing space</span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <span class="file-indicator">●</span>
+                <span id="current-file">No file selected</span>
+            </div>
+
+            <div class="header-actions">
+                <span class="status-indicator"></span>
+                <span id="save-status">Ready</span>
+            </div>
+
+        </header>
+
+
+        <!-- Main Application -->
+        <main class="main-container">
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+
+                <div class="sidebar-header">
+
+                    <h2>EXPLORER</h2>
+
+                    <div class="sidebar-actions">
+
+                        <button
+                            id="new-file-btn"
+                            type="button"
+                            title="Create New File"
+                            aria-label="Create new file">
+                            <span>＋</span> File
+                        </button>
+
+                        <button
+                            id="new-folder-btn"
+                            type="button"
+                            title="Create New Folder"
+                            aria-label="Create new folder">
+                            <span>＋</span> Folder
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Workspace -->
+                <div class="directory-section">
+
+                    <div
+                        class="directory-header"
+                        id="workspace-header"
+                        title="Click to select a workspace">
+
+                        <span class="workspace-icon">📁</span>
+                        <span>WORKSPACE</span>
+                        <span class="workspace-arrow">⌄</span>
+
+                    </div>
+
+                    <div id="file-tree" class="file-tree">
+
+                        <div class="empty-message">
+                            <span class="empty-icon">📂</span>
+                            <p>No workspace selected</p>
+                            <small>Select a folder to get started.</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+            <!-- Editor Section -->
+            <section class="editor-section">
+
+                <!-- Editor Toolbar -->
+                <div class="editor-toolbar">
+
+                    <div class="editor-tab">
+
+                        <span class="tab-icon">📄</span>
+
+                        <span id="editor-filename">Untitled</span>
+
+                    </div>
+
+                    <div class="editor-actions">
+
+                        <button
+                            id="save-btn"
+                            type="button"
+                            title="Save file">
+
+                            <span>💾</span> Save
+
+                        </button>
+
+                        <button
+                            id="history-btn"
+                            type="button"
+                            title="View file history">
+
+                            <span>◷</span> History
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Editor Content -->
+                <div class="editor-container">
+
+                    <div
+                        class="line-numbers"
+                        id="line-numbers"
+                        aria-hidden="true">
+                        1
+                    </div>
+
+                    <textarea
+                        id="editor"
+                        class="editor"
+                        placeholder="Start writing your thoughts here..."
+                        spellcheck="false"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        disabled
+                        aria-label="Text editor"
+                    ></textarea>
+
+                </div>
+
+
+                <!-- Editor Footer -->
+                <div class="editor-footer">
+                    <span>Notepad Editor</span>
+                    <span>UTF-8</span>
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- Bottom Status Bar -->
+        <footer class="status-bar">
+
+            <div class="status-left">
+
+                <span class="status-item" id="git-status">
+                    <span>⑂</span> Git: Not initialized
+                </span>
+
+            </div>
+
+            <div class="status-right">
+
+                <span class="status-item" id="cursor-position">
+                    Ln 1, Col 1
+                </span>
+
+                <span class="status-item" id="file-type">
+                    Plain Text
+                </span>
+
+                <span class="status-item">
+                    UTF-8
+                </span>
+
+            </div>
+
+        </footer>
+
+    </div>
+
+
+    <!-- Git History Modal -->
+    <div id="history-modal" class="history-modal hidden">
+
+        <div class="history-panel">
+
+            <div class="history-header">
+
+                <div>
+                    <h2>File History</h2>
+                    <p id="history-filename">No file selected</p>
+                </div>
+
+                <button
+                    id="close-history-btn"
+                    type="button"
+                    aria-label="Close history">
+                    &times;
+                </button>
+
+            </div>
+
+            <div id="history-list" class="history-list">
+
+                <p class="history-empty">
+                    Select a file to view its history.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+
+</body>
+</html>
